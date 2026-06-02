@@ -61,7 +61,7 @@ export default function RecipeCard({ recipe, onClick }: RecipeCardProps) {
                             src={recipe.image}
                             alt={recipe.title}
                             fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                     ) : (
                         <div className="absolute inset-0 bg-gradient-to-tr from-cream via-sage/5 to-cream flex flex-col items-center justify-center p-8 text-center select-none">
