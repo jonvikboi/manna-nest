@@ -46,8 +46,8 @@ export const recipes: Recipe[] = [
     },
     {
         id: "5",
-        title: "Meat Curry",
-        description: "Succulent, slow-cooked meat simmered in a deeply aromatic, dark roasted coconut gravy with traditional Malabar spices, ginger, and caramelized onions.",
+        title: "Buffalo Curry",
+        description: "Succulent, slow-cooked Buffalo meat simmered in a deeply aromatic, dark roasted coconut gravy with traditional Malabar spices, ginger, and caramelized onions.",
         image: "/images/beef_curry.jpg",
         category: "Dishes",
         deliveryTime: "Delivered Hot"
@@ -70,8 +70,8 @@ export const recipes: Recipe[] = [
     },
     {
         id: "8",
-        title: "Meat Fry",
-        description: "A classic dry-roasted delicacy. Tender meat slow-cooked with spices, then roasted to dark, caramelized perfection with coconut slices and curry leaves in pure coconut oil.",
+        title: "Buffalo Fry",
+        description: "A classic dry-roasted delicacy. Tender  Buffalo meat slow-cooked with spices, then roasted to dark, caramelized perfection with coconut slices and curry leaves in pure coconut oil.",
         image: "/images/beef_fry.jpg",
         category: "Dishes",
         deliveryTime: "Delivered Warm"
