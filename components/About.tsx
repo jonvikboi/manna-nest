@@ -41,7 +41,7 @@ export default function About() {
     };
 
     const stats = [
-        { icon: ChefHat, value: "15+", label: "Years of Family Meals" },
+        { icon: ChefHat, value: "25+", label: "Years of Family Meals" },
         { icon: Award, value: "100%", label: "Made From Scratch" },
         { icon: Star, value: "50+", label: "Perfected Family Recipes" },
         { icon: Users, value: "Daily", label: "Nourished with Care" }
@@ -69,7 +69,7 @@ export default function About() {
                     <h2 className="text-5xl sm:text-6xl md:text-8xl font-serif font-medium text-charcoal mb-6 tracking-tight">
                         The Sanctuary
                     </h2>
-                    
+
                     <div className="flex items-center gap-6">
                         <div className="w-12 h-px bg-gold" />
                         <p className="text-xs tracking-[0.2em] text-charcoal/50 uppercase font-serif">
@@ -89,29 +89,29 @@ export default function About() {
                             transition={springConfig}
                             className="relative group w-full h-full"
                         >
-                        <div className="relative h-[500px] sm:h-[600px] md:h-[700px] rounded-none overflow-hidden border border-charcoal/10 group-hover:border-charcoal/30 transition-colors duration-500">
-                            <Image
-                                src="/images/chef-geena.jpg"
-                                alt="Geena Binu Jose"
-                                fill
-                                className="object-cover grayscale group-hover:grayscale-0 transition-transform duration-700"
-                            />
-                            {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent opacity-80" />
+                            <div className="relative h-[500px] sm:h-[600px] md:h-[700px] rounded-none overflow-hidden border border-charcoal/10 group-hover:border-charcoal/30 transition-colors duration-500">
+                                <Image
+                                    src="/images/chef-geena.jpg"
+                                    alt="Geena Binu Jose"
+                                    fill
+                                    className="object-cover transition-transform duration-700"
+                                />
+                                {/* Gradient overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent opacity-80" />
 
-                            {/* Sharp floating name badge */}
-                            <motion.div
-                                initial={{ opacity: 0, scaleY: 0 }}
-                                whileInView={{ opacity: 1, scaleY: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ ...springConfig, delay: 0.3 }}
-                                className="absolute bottom-6 left-6 right-6 bg-cream border border-charcoal/10 p-6 md:p-8 transform origin-bottom"
-                            >
-                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gold" />
-                                <h3 className="text-2xl sm:text-3xl font-serif font-medium text-charcoal mb-2">Geena Binu Jose</h3>
-                                <p className="text-xs tracking-widest text-charcoal/50 uppercase font-serif">Homemaker & Passionate Cook</p>
-                            </motion.div>
-                        </div>
+                                {/* Sharp floating name badge */}
+                                <motion.div
+                                    initial={{ opacity: 0, scaleY: 0 }}
+                                    whileInView={{ opacity: 1, scaleY: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ ...springConfig, delay: 0.3 }}
+                                    className="absolute bottom-6 left-6 right-6 bg-cream border border-charcoal/10 p-6 md:p-8 transform origin-bottom"
+                                >
+                                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gold" />
+                                    <h3 className="text-2xl sm:text-3xl font-serif font-medium text-charcoal mb-2">Geena Binu Jose</h3>
+                                    <p className="text-xs tracking-widest text-charcoal/50 uppercase font-serif">Homemaker & Passionate Cook</p>
+                                </motion.div>
+                            </div>
                         </motion.div>
                     </motion.div>
 
@@ -127,7 +127,7 @@ export default function About() {
                             transition={{ ...springConfig, delay: 0.2 }}
                         >
                             <p className="text-base sm:text-lg text-charcoal/80 leading-relaxed mb-4">
-                                Geena Binu Jose is a homemaker whose true joy lies in cooking wholesome, delicious meals for her loved ones. For over 15 years, her home kitchen has been a gathering place where simple, fresh ingredients are turned into comforting daily feasts.
+                                Geena Binu Jose is a homemaker whose true joy lies in cooking wholesome, delicious meals for her loved ones. For over 25 years, her home kitchen has been a gathering place where simple, fresh ingredients are turned into comforting daily feasts.
                             </p>
                             <p className="text-base sm:text-lg text-charcoal/80 leading-relaxed mb-4">
                                 What began as simple daily cooking for her household has grown into a life-long passion for perfecting home-cooked flavors. From traditional regional comfort food to warm, freshly baked loaves, her kitchen provides honest food made from scratch, filled with warmth and care.
