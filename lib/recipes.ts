@@ -142,6 +142,14 @@ export const recipes: Recipe[] = [
         category: "Snacks",
         deliveryTime: "Delivered Warm"
     },
+    {
+        id: "19",
+        title: "Vattayappam",
+        description: "Vattayappam is a traditional, slightly sweet, and fluffy steamed rice cake from Kerala, India. Made with a fermented batter of ground rice and coconut, it is naturally gluten-free and vegan. It is usually garnished with raisins and cashews, and served as a snack.",
+        image: "/images/vattayappam.jpg",
+        category: "Snacks",
+        deliveryTime: "Delivered Fresh"
+    },
 
     // --- DESSERTS ---
     {
