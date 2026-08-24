@@ -84,6 +84,14 @@ export const recipes: Recipe[] = [
         category: "Dishes",
         deliveryTime: "Delivered Warm"
     },
+    {
+        id: "20",
+        title: "Inchi Curry",
+        description: "A legendary Kerala classic balancing sweet, sour, and spicy notes. Crisp fried ginger slowly simmered in rich tamarind extract and dark jaggery, tempered with mustard seeds and fresh curry leaves.",
+        image: "/images/inchi.jpg",
+        category: "Dishes",
+        deliveryTime: "Delivered Fresh"
+    },
 
     // --- SNACKS ---
     {
