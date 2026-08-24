@@ -2,7 +2,9 @@
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { ShoppingBag } from "lucide-react";
 import GlassSurface from "./GlassSurface";
+import { useCart } from "@/lib/cart-context";
 
 const menuContainerVariants = {
     hidden: { 
@@ -33,6 +35,7 @@ const menuItemVariants = {
 export default function Navbar() {
     const { scrollY } = useScroll();
     const [isOpen, setIsOpen] = useState(false);
+    const { totalItems, openCart } = useCart();
 
     // Show navbar when scrolling past the hero section (approx 500px)
     const navbarOpacity = useTransform(scrollY, [500, 600], [0, 1]);
@@ -49,7 +52,7 @@ export default function Navbar() {
             }}
             className="fixed top-8 left-1/2 z-50 pointer-events-none"
         >
-            <div className="-translate-x-1/2 flex justify-center w-full min-w-[280px] sm:min-w-[340px] md:min-w-[450px]">
+            <div className="-translate-x-1/2 flex justify-center w-full min-w-[300px] sm:min-w-[360px] md:min-w-[480px]">
                 {/* Liquid Glass container with dynamic border radius */}
                 <GlassSurface
                     width="auto"
@@ -60,10 +63,10 @@ export default function Navbar() {
                     backgroundOpacity={0.83}
                     saturation={1.3}
                     blur={25}
-                    className="px-6 md:px-10 py-3 md:py-4 pointer-events-auto shadow-lg backdrop-blur-xl border border-charcoal/10 w-full transition-shadow duration-300"
+                    className="px-5 md:px-8 py-3 md:py-3.5 pointer-events-auto shadow-lg backdrop-blur-xl border border-charcoal/10 w-full transition-shadow duration-300"
                 >
                     <div className="flex flex-col w-full">
-                        <div className="flex items-center justify-between gap-6 md:gap-8 w-full">
+                        <div className="flex items-center justify-between gap-4 md:gap-8 w-full">
                             <div className="flex items-center gap-3">
                                 {/* Minimalist Logo Mark */}
                                 <motion.div
@@ -74,43 +77,59 @@ export default function Navbar() {
                                 {/* Brand name */}
                                 <motion.h2
                                     style={{ scale: titleScale }}
-                                    className="text-xl sm:text-2xl font-serif text-charcoal tracking-tight select-none"
+                                    className="text-lg sm:text-xl md:text-2xl font-serif text-charcoal tracking-tight select-none"
                                 >
                                     MANNA NEST
                                 </motion.h2>
                             </div>
 
-                            {/* Navigation links - hidden on mobile */}
-                            <div className="hidden md:flex items-center gap-6 pl-4 md:pl-6 border-l border-charcoal/10">
-                                <NavLink href="#recipes">Recipes</NavLink>
-                                <NavLink href="#about">About</NavLink>
-                                <NavLink href="#contact">Contact</NavLink>
-                            </div>
-
-                            {/* Hamburger Menu - visible on mobile only */}
-                            <button
-                                onClick={() => setIsOpen(!isOpen)}
-                                className="md:hidden flex items-center justify-center w-8 h-8 focus:outline-none cursor-pointer relative z-50"
-                                aria-label="Toggle Menu"
-                            >
-                                <div className="relative w-5 h-4 flex items-center justify-center">
-                                    <motion.span
-                                        animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -5 }}
-                                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                        className="absolute w-5 h-0.5 bg-charcoal block"
-                                    />
-                                    <motion.span
-                                        animate={isOpen ? { opacity: 0, scale: 0.5 } : { opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="absolute w-5 h-0.5 bg-charcoal block"
-                                    />
-                                    <motion.span
-                                        animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 5 }}
-                                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                        className="absolute w-5 h-0.5 bg-charcoal block"
-                                    />
+                            {/* Navigation links & Cart action */}
+                            <div className="flex items-center gap-4 md:gap-6">
+                                <div className="hidden md:flex items-center gap-6 pl-4 md:pl-6 border-l border-charcoal/10">
+                                    <NavLink href="#recipes">Recipes</NavLink>
+                                    <NavLink href="#about">About</NavLink>
+                                    <NavLink href="#contact">Contact</NavLink>
                                 </div>
-                            </button>
+
+                                {/* Cart Toggle Button */}
+                                <button
+                                    onClick={openCart}
+                                    className="relative p-2 rounded-full border border-charcoal/10 hover:border-gold/60 text-charcoal/80 hover:text-charcoal transition-all duration-300 cursor-pointer group flex items-center justify-center bg-cream/50"
+                                    aria-label="Open Pre-Order Basket"
+                                >
+                                    <ShoppingBag className="w-4 h-4 text-charcoal group-hover:text-gold transition-colors" />
+                                    {totalItems > 0 && (
+                                        <span className="absolute -top-1 -right-1 bg-gold text-charcoal font-serif font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center border border-cream shadow-xs">
+                                            {totalItems}
+                                        </span>
+                                    )}
+                                </button>
+
+                                {/* Hamburger Menu - visible on mobile only */}
+                                <button
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="md:hidden flex items-center justify-center w-8 h-8 focus:outline-none cursor-pointer relative z-50"
+                                    aria-label="Toggle Menu"
+                                >
+                                    <div className="relative w-5 h-4 flex items-center justify-center">
+                                        <motion.span
+                                            animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -5 }}
+                                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                            className="absolute w-5 h-0.5 bg-charcoal block"
+                                        />
+                                        <motion.span
+                                            animate={isOpen ? { opacity: 0, scale: 0.5 } : { opacity: 1, scale: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute w-5 h-0.5 bg-charcoal block"
+                                        />
+                                        <motion.span
+                                            animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 5 }}
+                                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                            className="absolute w-5 h-0.5 bg-charcoal block"
+                                        />
+                                    </div>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Mobile Dropdown Panel with Staggered Transitions */}

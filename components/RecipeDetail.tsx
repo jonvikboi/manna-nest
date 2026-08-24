@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Tag, Truck, ShoppingBag, Plus, Minus, User, Leaf } from "lucide-react";
+import { X, Check, Truck, ShoppingBag, Plus, Minus, User, Leaf, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { Recipe } from "@/lib/recipes";
 import { springConfig } from "@/lib/animation-config";
 import { useState } from "react";
+import { useCart } from "@/lib/cart-context";
 
 interface RecipeDetailProps {
     recipe: Recipe | null;
@@ -24,23 +25,33 @@ export default function RecipeDetail({ recipe, onClose }: RecipeDetailProps) {
     const [quantity, setQuantity] = useState(1);
     const [name, setName] = useState("");
     const [orderStatus, setOrderStatus] = useState<"idle" | "submitting" | "success">("idle");
+    const [addedToCartToast, setAddedToCartToast] = useState(false);
+    const { addToCart, openCart } = useCart();
 
     if (!recipe) return null;
 
+    const handleAddToCart = () => {
+        addToCart(recipe, quantity);
+        setAddedToCartToast(true);
+        setTimeout(() => {
+            setAddedToCartToast(false);
+        }, 2500);
+    };
+
     const handlePreOrder = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name) return;
+        if (!name.trim()) return;
         setOrderStatus("submitting");
 
-        // Format a clean, professional WhatsApp order message using ASCII characters
+        // Format a clean, professional WhatsApp order message
         const messageText = `Hello! I would like to place a pre-order with Manna Nest.
 
 [Order Details]
-* Item: ${recipe.title}
+* Item: ${recipe.title} [${recipe.category}]
 * Quantity: ${quantity} portion(s)
 
 [Customer Details]
-* Name: ${name}
+* Name: ${name.trim()}
 
 Please let me know the confirmation and payment details. Thank you!`;
 
@@ -49,7 +60,6 @@ Please let me know the confirmation and payment details. Thank you!`;
 
         setTimeout(() => {
             setOrderStatus("success");
-            // Open WhatsApp in a new tab/app window
             window.open(whatsappUrl, "_blank");
         }, 1200);
     };
@@ -59,6 +69,7 @@ Please let me know the confirmation and payment details. Thank you!`;
         setQuantity(1);
         setName("");
         setOrderStatus("idle");
+        setAddedToCartToast(false);
         onClose();
     };
 
@@ -150,10 +161,8 @@ Please let me know the confirmation and payment details. Thank you!`;
                                                 <span className="text-charcoal font-medium">{quantity}x</span>
                                             </div>
                                             <div className="flex justify-between pt-1 text-base font-semibold">
-                                                <span className="text-charcoal/60">Total Value:</span>
-                                                <span className="text-gold">
-                                                    {recipe.price !== undefined ? `₹${(recipe.price * quantity).toFixed(2)}` : "₹ Price on Request"}
-                                                </span>
+                                                <span className="text-charcoal/60">Delivery Status:</span>
+                                                <span className="text-sage">{recipe.deliveryTime}</span>
                                             </div>
                                         </div>
 
@@ -187,7 +196,7 @@ Please let me know the confirmation and payment details. Thank you!`;
 
                                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
                                             
-                                            {/* Left Column - Product Information / Sanctuary Standards */}
+                                            {/* Left Column - Product Information */}
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
@@ -219,14 +228,8 @@ Please let me know the confirmation and payment details. Thank you!`;
 
                                                 <div className="border border-charcoal/5 p-6 bg-cream/30 space-y-4 rounded-sm text-sm">
                                                     <div className="flex justify-between border-b border-charcoal/5 pb-2 font-serif">
-                                                        <span className="text-charcoal/40">Offering Price:</span>
-                                                        <span className="text-charcoal font-semibold">
-                                                            {recipe.price !== undefined ? `₹${recipe.price.toFixed(2)}` : "₹ Price on Request"}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex justify-between border-b border-charcoal/5 pb-2 font-serif">
                                                         <span className="text-charcoal/40">Category:</span>
-                                                        <span className="text-charcoal">{recipe.category}</span>
+                                                        <span className="text-charcoal font-medium">{recipe.category}</span>
                                                     </div>
                                                     <div className="flex justify-between font-serif">
                                                         <span className="text-charcoal/40">Delivery Status:</span>
@@ -238,21 +241,20 @@ Please let me know the confirmation and payment details. Thank you!`;
                                                 </div>
                                             </motion.div>
 
-                                            {/* Right Column - Pre-order Form */}
+                                            {/* Right Column - Actions & Pre-order Form */}
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ ...springConfig, delay: 0.25 }}
-                                                className="lg:col-span-7 border border-charcoal/10 p-6 md:p-10 bg-cream/40"
+                                                className="lg:col-span-7 border border-charcoal/10 p-6 md:p-10 bg-cream/40 space-y-8"
                                             >
-                                                <h3 className="text-xl font-serif font-medium text-charcoal mb-6 border-b border-charcoal/10 pb-2">
-                                                    Place Pre-Order
-                                                </h3>
+                                                {/* Quantity Selector & Quick Add to Cart */}
+                                                <div>
+                                                    <h3 className="text-xl font-serif font-medium text-charcoal mb-4 border-b border-charcoal/10 pb-2">
+                                                        Select Portion & Basket
+                                                    </h3>
 
-                                                <form onSubmit={handlePreOrder} className="space-y-6">
-
-                                                    {/* Quantity Selector */}
-                                                    <div className="flex items-center justify-between border-b border-charcoal/10 pb-4">
+                                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-charcoal/10 bg-cream mb-4">
                                                         <div>
                                                             <label className="block text-xs uppercase tracking-widest text-charcoal/50 font-serif">
                                                                 Quantity
@@ -267,7 +269,7 @@ Please let me know the confirmation and payment details. Thank you!`;
                                                             >
                                                                 <Minus className="w-3.5 h-3.5" />
                                                             </button>
-                                                            <span className="text-lg font-serif font-semibold text-charcoal min-w-[20px] text-center">
+                                                            <span className="text-lg font-serif font-semibold text-charcoal min-w-[24px] text-center">
                                                                 {quantity}
                                                             </span>
                                                             <button
@@ -280,47 +282,77 @@ Please let me know the confirmation and payment details. Thank you!`;
                                                         </div>
                                                     </div>
 
-                                                    {/* Name Input */}
-                                                    <div>
-                                                        <label htmlFor="order-name" className="block text-xs uppercase tracking-widest text-charcoal/50 mb-2 font-serif flex items-center gap-1.5">
-                                                            <User className="w-3.5 h-3.5 text-sage" />
-                                                            Your Name
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            id="order-name"
-                                                            value={name}
-                                                            onChange={(e) => setName(e.target.value)}
-                                                            required
-                                                            placeholder="Enter your name"
-                                                            className="w-full px-4 py-3 border border-charcoal/20 bg-cream/70 focus:border-gold focus:outline-none transition-colors text-charcoal rounded-none text-sm font-sans"
-                                                        />
+                                                    {/* Add to Basket Action */}
+                                                    <div className="flex flex-col sm:flex-row gap-3">
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleAddToCart}
+                                                            className="flex-1 py-3.5 px-6 bg-charcoal text-cream text-xs uppercase tracking-[0.2em] font-serif hover:bg-gold hover:text-charcoal transition-all duration-300 flex items-center justify-center gap-2"
+                                                        >
+                                                            <ShoppingBag className="w-4 h-4 text-gold" />
+                                                            <span>Add to Pre-Order Basket</span>
+                                                        </button>
+                                                        
+                                                        {addedToCartToast && (
+                                                            <motion.button
+                                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                                animate={{ opacity: 1, scale: 1 }}
+                                                                onClick={() => {
+                                                                    handleClose();
+                                                                    openCart();
+                                                                }}
+                                                                className="py-3 px-4 border border-gold bg-gold/10 text-charcoal text-xs uppercase tracking-wider font-serif flex items-center justify-center gap-2 hover:bg-gold/20 transition-colors"
+                                                            >
+                                                                <span>View Basket</span>
+                                                                <ArrowRight className="w-3.5 h-3.5" />
+                                                            </motion.button>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Single Item Direct Pre-Order */}
+                                                <div className="pt-6 border-t border-charcoal/10">
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <h4 className="text-sm font-serif uppercase tracking-widest text-charcoal/70">
+                                                            Or Instant Single-Item Pre-Order
+                                                        </h4>
                                                     </div>
 
-                                                    {/* Submit Pre-order */}
-                                                    <motion.button
-                                                        type="submit"
-                                                        disabled={orderStatus === "submitting"}
-                                                        whileHover={{ backgroundColor: "#25D366", borderColor: "#25D366", color: "#ffffff" }}
-                                                        className="w-full bg-orange text-cream font-medium tracking-widest uppercase py-4 px-6 border border-orange hover:border-[#25D366] transition-colors duration-300 rounded-none cursor-pointer disabled:opacity-50 flex items-center justify-center gap-3 font-serif"
-                                                    >
-                                                        {orderStatus === "submitting" ? (
-                                                            <>
-                                                                <div className="w-4 h-4 border border-cream border-t-transparent rounded-full animate-spin" />
-                                                                Redirecting to WhatsApp...
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                Confirm pre-order on WhatsApp
-                                                            </>
-                                                        )}
-                                                    </motion.button>
+                                                    <form onSubmit={handlePreOrder} className="space-y-4">
+                                                        <div>
+                                                            <label htmlFor="order-name" className="block text-xs uppercase tracking-widest text-charcoal/50 mb-1.5 font-serif flex items-center gap-1.5">
+                                                                <User className="w-3.5 h-3.5 text-sage" />
+                                                                Your Name
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                id="order-name"
+                                                                value={name}
+                                                                onChange={(e) => setName(e.target.value)}
+                                                                placeholder="Enter your name for quick WhatsApp pre-order"
+                                                                className="w-full px-4 py-2.5 border border-charcoal/20 bg-cream/70 focus:border-gold focus:outline-none transition-colors text-charcoal text-sm font-sans"
+                                                            />
+                                                        </div>
 
-                                                    <p className="text-[10px] text-charcoal/40 font-serif italic text-center">
-                                                        *Kind notification: Pre-orders are locked in 24 hours prior to preparation to enable organic supply alignment.
-                                                    </p>
+                                                        <button
+                                                            type="submit"
+                                                            disabled={orderStatus === "submitting" || !name.trim()}
+                                                            className="w-full bg-orange-burnt/90 text-cream font-medium tracking-widest uppercase py-3 px-6 hover:bg-[#25D366] transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-xs font-serif"
+                                                        >
+                                                            {orderStatus === "submitting" ? (
+                                                                <>
+                                                                    <div className="w-4 h-4 border border-cream border-t-transparent rounded-full animate-spin" />
+                                                                    Redirecting to WhatsApp...
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span>Pre-Order This Item on WhatsApp</span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    </form>
+                                                </div>
 
-                                                </form>
                                             </motion.div>
 
                                         </div>

@@ -2,9 +2,11 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { ShoppingBag } from "lucide-react";
 import { Recipe } from "@/lib/recipes";
 import RecipeCard from "./RecipeCard";
 import { staggerContainerVariants, fadeInVariants } from "@/lib/animation-config";
+import { useCart } from "@/lib/cart-context";
 
 interface RecipeGridProps {
     recipes: Recipe[];
@@ -13,6 +15,7 @@ interface RecipeGridProps {
 
 export default function RecipeGrid({ recipes, onRecipeClick }: RecipeGridProps) {
     const [activeCategory, setActiveCategory] = useState<"All" | "Mains" | "Dishes" | "Snacks" | "Desserts">("All");
+    const { totalItems, openCart } = useCart();
 
     const filteredRecipes = activeCategory === "All"
         ? recipes
@@ -56,30 +59,43 @@ export default function RecipeGrid({ recipes, onRecipeClick }: RecipeGridProps) 
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="flex flex-wrap items-center justify-start gap-x-8 gap-y-4 mb-16 pb-4 border-b border-charcoal/5"
+                className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 mb-16 pb-4 border-b border-charcoal/5"
             >
-                {(["All", "Mains", "Dishes", "Snacks", "Desserts"] as const).map((category) => {
-                    const isActive = activeCategory === category;
-                    return (
-                        <button
-                            key={category}
-                            onClick={() => setActiveCategory(category)}
-                            className="relative py-2 px-1 text-xs font-serif uppercase tracking-[0.25em] transition-colors duration-300 focus:outline-none cursor-pointer"
-                            style={{ color: isActive ? "var(--color-gold)" : "rgba(250, 248, 245, 0.5)" }} // Fallback check or standard text-charcoal
-                        >
-                            <span className={`relative z-10 transition-colors duration-300 ${isActive ? "text-gold font-medium" : "text-charcoal/55 hover:text-charcoal"}`}>
-                                {category}
-                            </span>
-                            {isActive && (
-                                <motion.div
-                                    layoutId="activeCategoryUnderline"
-                                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
-                                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                />
-                            )}
-                        </button>
-                    );
-                })}
+                <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+                    {(["All", "Mains", "Dishes", "Snacks", "Desserts"] as const).map((category) => {
+                        const isActive = activeCategory === category;
+                        return (
+                            <button
+                                key={category}
+                                onClick={() => setActiveCategory(category)}
+                                className="relative py-2 px-1 text-xs font-serif uppercase tracking-[0.25em] transition-colors duration-300 focus:outline-none cursor-pointer"
+                            >
+                                <span className={`relative z-10 transition-colors duration-300 ${isActive ? "text-gold font-medium" : "text-charcoal/55 hover:text-charcoal"}`}>
+                                    {category}
+                                </span>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeCategoryUnderline"
+                                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold"
+                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {totalItems > 0 && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={openCart}
+                        className="text-xs uppercase tracking-widest font-serif font-medium text-gold hover:text-charcoal flex items-center gap-2 transition-colors py-1.5 px-3.5 border border-gold/40 bg-gold/5 hover:bg-gold/15 cursor-pointer"
+                    >
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span>Pre-Order Basket ({totalItems})</span>
+                    </motion.button>
+                )}
             </motion.div>
 
             {/* Grid display */}
