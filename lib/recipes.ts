@@ -175,5 +175,13 @@ export const recipes: Recipe[] = [
         image: "/images/pudding.jpg",
         category: "Desserts",
         deliveryTime: "Delivered Chilled"
+    },
+    {
+        id: "21",
+        title: "Halwa",
+        description: "A cherished confection renowned for its glossy, melt-in-the-mouth texture. Slow-stirred in large traditional cauldrons with wheat extract, dark melted jaggery, pure fragrant ghee, and crushed cardamom until rich and gelatinous.",
+        image: "/images/halwa.jpg",
+        category: "Desserts",
+        deliveryTime: "Delivered Fresh"
     }
 ];

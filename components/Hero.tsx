@@ -72,25 +72,11 @@ export default function Hero() {
                     </motion.div>
                 </motion.div>
 
-                {/* Right Column - Asymmetric Vertical Tension */}
+                {/* Right Column - Preserves exact layout structure */}
                 <motion.div
                     style={{ y: y2, opacity }}
-                    className="hidden md:flex col-span-4 h-full flex-col justify-end pb-32 items-end"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        className="text-right"
-                    >
-                        <ul className="space-y-4 font-serif text-charcoal/40 text-sm tracking-[0.3em] uppercase">
-                            <li>01 \ Gather</li>
-                            <li>02 \ Nourish</li>
-                            <li>03 \ Restore</li>
-                        </ul>
-                    </motion.div>
-                </motion.div>
-
+                    className="hidden md:flex col-span-4 h-full flex-col justify-end pb-32 items-end pointer-events-none"
+                />
             </div>
 
             {/* Bottom Ticker - Very Subtle */}
